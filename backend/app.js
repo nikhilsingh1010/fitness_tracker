@@ -2,16 +2,24 @@ import express from "express";
 import { config } from "dotenv";
 import cors from "cors";
 import { sendEmail } from "./utils/sendEmail.js";
+import path from "path";
 
 const app = express();
 const router = express.Router();
 
+const _dirname = path.resolve();
 config({ path: "./config.env" });
 
 app.use(
   cors({
     origin: [process.env.FRONTEND_URL],
     methods: ["POST"],
+    credentials: true,
+  })
+);
+app.use(
+  cors({
+    origin: "http://localhost:5174", // Your frontend URL
     credentials: true,
   })
 );
@@ -31,8 +39,8 @@ router.post("/send/mail", async (req, res, next) => {
   }
   try {
     await sendEmail({
-      email: "merndeveloper4@gmail.com",
-      subject: "GYM WEBSITE CONTACT",
+      email: "nikhilsinghthakur1010@gmail.com",
+      subject: "Fitness Tracker",
       message,
       userEmail: email,
     });
@@ -49,6 +57,11 @@ router.post("/send/mail", async (req, res, next) => {
 });
 
 app.use(router);
+
+app.use(express.static(path.join(_dirname, "/frontend/dist")));
+app.get("*", (_, res) => {
+  res.sendFile(path.resolve(_dirname, "frontend", "dist", "index.html"));
+});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server listening at port ${process.env.PORT}`);

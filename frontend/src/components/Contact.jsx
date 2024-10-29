@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 
@@ -28,11 +28,15 @@ const Contact = () => {
       setName("");
       setEmail("");
       setMessage("");
-      toast.success(data.message);
-      setLoading(false);
+      toast.success(data.message || "Message sent successfully!");
     } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message || "Something went wrong!");
+      } else {
+        toast.error("Something went wrong!");
+      }
+    } finally {
       setLoading(false);
-      toast.error(error.response.data.message);
     }
   };
 
