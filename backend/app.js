@@ -19,7 +19,7 @@ app.use(
 );
 app.use(
   cors({
-    origin: "http://localhost:5174", // Your frontend URL
+    origin: "https://fitness-tracker-oyxh.onrender.com/", // Your frontend URL
     credentials: true,
   })
 );
